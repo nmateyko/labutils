@@ -90,7 +90,7 @@ def main():
   parser.add_argument("-u", "--upstream", required=True, type=str, help="sequence upstream of insert")
   parser.add_argument("-d", "--downstream", required=True, type=str, help="sequence downstream of insert")
   parser.add_argument("-l", "--length", required=True, type=int, help="expected maximum insert length")
-  parser.add_argument("-t", "--threshold", default=3, type=int, help="threshold (maximum distance) for upstream and downstream matching")
+  parser.add_argument("-t", "--threshold", default=8, type=int, help="threshold (maximum distance) for upstream and downstream matching")
   parser.add_argument("-f", "--dist-func", default='levenshtein', choices = ['levenshtein', 'hamming'], type=str, help="distance function for upstream and downstream matching")
   parser.add_argument("-n", "--no-empty", action='store_true', help="don't save matches with no insert")
   parser.add_argument("-r", "--revcomp", action='store_true', help="also print reverse complement of inserts")
