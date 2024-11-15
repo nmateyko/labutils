@@ -61,4 +61,6 @@ def levenshtein(s1, s2):
 
 
 def hamming_dist(a, b):
+    if len(a) != len(b):
+        raise ValueError("Sequences must be of equal length")
     return sum(i != j for i, j in zip(a, b))
