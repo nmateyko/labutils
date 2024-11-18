@@ -64,3 +64,6 @@ def hamming_dist(a, b):
     if len(a) != len(b):
         raise ValueError("Sequences must be of equal length")
     return sum(i != j for i, j in zip(a, b))
+
+def is_DNA(seq):
+    return set(seq).issubset({'A', 'C', 'G', 'T', 'N'})
