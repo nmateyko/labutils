@@ -2,7 +2,7 @@
 
 import argparse
 import edlib
-from sequence_analysis.utils import read_fastq, revcomp
+from sequence_analysis.utils import read_fastq, revcomp, is_DNA
 
 
 def get_align_pos(seq, kmer, dist):
@@ -103,15 +103,26 @@ def main():
     parser.add_argument("-i", "--input", required=True, type=str, help="path to fastq file (unzipped)")
     parser.add_argument("-u", "--upstream", required=True, type=str, help="sequence upstream of insert")
     parser.add_argument("-d", "--downstream", required=True, type=str, help="sequence downstream of insert")
-    parser.add_argument("-t", "--threshold", default=8, type=int, help="threshold (maximum distance) for upstream and downstream matching")
-    parser.add_argument("-n", "--no-empty", action='store_true', help="don't save matches with no insert")
-    parser.add_argument("-r", "--revcomp", action='store_true', help="also print reverse complement of inserts")
+    parser.add_argument("-t", "--threshold", default=None, type=int, help="threshold (maximum distance) for upstream and downstream matching")
+    parser.add_argument("-n", "--no-empty", action='store_true', help="don't save matches with no insert in table")
+    parser.add_argument("-r", "--revcomp", action='store_true', help="also print reverse complement of inserts in table")
     parser.add_argument("-q", "--quality", action='store_true', help="also print quality of inserts and upstream/downstream in table")
     parser.add_argument("-o", "--output", default="inserts", type=str, help="file name for output")
     args = parser.parse_args()
 
     upstream = args.upstream.upper()
     downstream = args.downstream.upper()
+
+    if not is_DNA(upstream) or not is_DNA(downstream):
+        raise ValueError("Upstream and downstream sequences must only contain ACTGN")
+
+    if args.threshold is None:
+        threshold = round(min(len(upstream), len(downstream)) * 0.05)
+        print(f'Using default distance threshold of {threshold}')
+    elif args.threshold < 0:
+        raise ValueError("Threshold must be a non-negative integer")
+    else:
+        threshold = args.threshold
 
     # read in sequences from fastq
     with open(args.input, 'r') as f:
@@ -124,7 +135,7 @@ def main():
     for read in reads:
         # concat read to itself in case plasmid linearized within insert
         concat_read = (read[0], read[1] + read[1], read[2] + read[2]) 
-        pos_dict = get_insert_pos(concat_read, upstream, downstream, t=args.threshold)
+        pos_dict = get_insert_pos(concat_read, upstream, downstream, t=threshold)
         extract = extract_insert_and_flanks(concat_read, pos_dict) if pos_dict else None
         if extract:
             extracted.append(extract)
