@@ -1,5 +1,5 @@
 import unittest
-from sequence_analysis.utils import read_fastq, revcomp, levenshtein, hamming_dist
+from sequence_analysis.utils import read_fastq, revcomp, levenshtein, hamming_dist, is_DNA
 from io import StringIO
 
 class TestUtils(unittest.TestCase):
@@ -58,6 +58,19 @@ class TestUtils(unittest.TestCase):
         # Edge case: Different lengths (should raise an error)
         with self.assertRaises(ValueError):
             hamming_dist("ACTG", "ACT")
+
+    def test_is_DNA(self):
+        # Valid cases
+        self.assertTrue(is_DNA("ACTG"))
+        self.assertTrue(is_DNA("NNNN"))
+        self.assertTrue(is_DNA("ACGTN"))
+        self.assertTrue(is_DNA(""))
+
+        # Invalid cases
+        self.assertFalse(is_DNA("ACXG"))
+        self.assertFalse(is_DNA("ACGTX"))
+        self.assertFalse(is_DNA("ACGTN "))
+        self.assertFalse(is_DNA("ACGTN\n"))
 
 if __name__ == "__main__":
     unittest.main()
