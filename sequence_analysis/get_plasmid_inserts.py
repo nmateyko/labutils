@@ -6,7 +6,7 @@ from sequence_analysis.utils import read_fastq, revcomp, is_DNA
 
 
 def get_align_pos(seq, kmer, dist):
-    '''Return the end index of the best alignment of kmer in seq.
+    '''Return the start and end index of the best alignment of kmer in seq.
         Parameters:
             seq (str): A sequence to search in.
             kmer (str): A sequence to search for.
