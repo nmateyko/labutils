@@ -1,9 +1,9 @@
-from setuptools import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name="labutils",
     version="1.1.0",
-    packages=['sequence_analysis'],
+    packages=setuptools.find_packages(),
     install_requires=['edlib'],
     entry_points={
         "console_scripts": [
