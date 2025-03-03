@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name="labutils",
     version="1.1.0",
-    packages=setuptools.find_packages(),
+    packages=['labutils'],
     install_requires=['edlib'],
     entry_points={
         "console_scripts": [
