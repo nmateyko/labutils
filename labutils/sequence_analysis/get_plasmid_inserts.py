@@ -2,7 +2,7 @@
 
 import argparse
 import edlib
-from sequence_analysis.utils import read_fastq, revcomp, is_DNA
+from labutils.sequence_analysis.utils import read_fastq, revcomp, is_DNA
 
 
 def get_align_pos(seq, kmer, dist):

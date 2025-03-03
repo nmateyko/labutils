@@ -1,13 +1,13 @@
-import setuptools
+from setuptools import setup, find_packages
 
-setuptools.setup(
+setup(
     name="labutils",
     version="1.1.0",
-    packages=['labutils'],
+    packages=find_packages(),
     install_requires=['edlib'],
     entry_points={
         "console_scripts": [
-            "get_plasmid_inserts=sequence_analysis.get_plasmid_inserts:main",
+            "get_plasmid_inserts=labutils.sequence_analysis.get_plasmid_inserts:main",
         ],
     },
     test_suite='tests',

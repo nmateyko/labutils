@@ -1,6 +1,6 @@
 import unittest
-from sequence_analysis.get_plasmid_inserts import get_align_pos, get_insert_pos, extract_insert_and_flanks, extract_insert_fastq
-from sequence_analysis.utils import revcomp
+from labutils.sequence_analysis.get_plasmid_inserts import get_align_pos, get_insert_pos, extract_insert_and_flanks, extract_insert_fastq
+from labutils.sequence_analysis.utils import revcomp
 
 class TestGetPlasmidInserts(unittest.TestCase):
 

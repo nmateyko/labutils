@@ -1,5 +1,5 @@
 import unittest
-from sequence_analysis.utils import read_fastq, revcomp, levenshtein, hamming_dist, is_DNA
+from labutils.sequence_analysis.utils import read_fastq, revcomp, levenshtein, hamming_dist, is_DNA
 from io import StringIO
 
 class TestUtils(unittest.TestCase):
