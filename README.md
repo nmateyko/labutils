@@ -1,5 +1,5 @@
 # Labutils
-This repository contains miscellaneous scripts that I find myself repeatedly
+This repository contains miscellaneous code that I find myself repeatedly
 using in my lab work.
 
 Install:
@@ -44,6 +44,38 @@ the regions being matched are what you expect, and if you want to visually compa
 sequences easily as they are all aligned in a column. Optionally, quality can be included with
 the `-q` argument, the reverse complement of the inserts can be added with the `-r` argument,
 and empty inserts can be excluded with the `-n` argument.
+
+## data_vis
+
+This package is for visualization of sequencing data.
+
+### alignment.py
+
+Contains classes (parent AlignmentProcessor and child BiopythonAlignmentProcessor)
+for aligning sequencing reads to a reference and encoding the alignment
+results into a format that can be plotted with the plot_alignments function.
+
+To use:
+
+```
+from labutils.data_vis.alignment import BiopythonAlignmentProcessor, plot_alignments
+ref_seq = 'AAAATTTT'
+seqs = ['AAAA', 'AATT', 'TTTT']
+biopython_processor = BiopythonAlignmentProcessor(ref_seq)
+encoded_alignments, insertions_info = biopython_processor.process_seqs(seqs)
+plot_alignments(encoded_alignments, insertions_info, show_insertions=True)
+```
+Note that **insertions are overlaid on the alignment plot** to maintain alignment with
+the correct reference position. Insertion plotting can be turned off to see what's
+hidden beneath longer insertions.
+
+### mappy_alignment.py
+
+Contains the Minimap2AlignmentProcessor child class, which uses minimap2 (through the
+mappy package) for alignment instead of Biopython. Note that a path to the reference
+sequence fasta, rather than a string, must be passed when instantiating objects of this class
+since mappy has to be passed a fasta file path. Otherwise usage is the same as its sibling
+class shown above.
 
 ## Running tests
 
