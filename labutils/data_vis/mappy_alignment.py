@@ -5,7 +5,8 @@ from labutils.data_vis.alignment import AlignmentProcessor
 class Minimap2AlignmentProcessor(AlignmentProcessor):
     def __init__(self, ref_seq_file):
         self.aligner = mp.Aligner(ref_seq_file, preset="map-ont", extra_flags=0x4000000)
-        _, self.ref_seq = next(read_fasta(ref_seq_file))
+        with open(ref_seq_file) as f:
+            _, self.ref_seq = next(read_fasta(f))
 
     def align(self, seq):
         return next(self.aligner.map(seq), None)
