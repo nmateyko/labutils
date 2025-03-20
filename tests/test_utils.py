@@ -1,5 +1,13 @@
 import unittest
-from labutils.sequence_analysis.utils import read_fastq, revcomp, levenshtein, hamming_dist, is_DNA
+from labutils.sequence_analysis.utils import (
+    read_fastq,
+    read_fasta,
+    revcomp,
+    revcomp_read,
+    levenshtein,
+    hamming_dist,
+    is_DNA,
+)
 from io import StringIO
 
 class TestUtils(unittest.TestCase):
@@ -71,6 +79,39 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(is_DNA("ACGTX"))
         self.assertFalse(is_DNA("ACGTN "))
         self.assertFalse(is_DNA("ACGTN\n"))
+
+    def test_read_fasta(self):
+        # Valid FASTA input
+        fasta_data = """>seq1
+        ATCGATCG
+        >seq2
+        GGGTTTCCC
+        """
+        with StringIO(fasta_data) as fasta_file:
+            result = list(read_fasta(fasta_file))
+            self.assertEqual(len(result), 2)
+            self.assertEqual(result[0], ("seq1", "ATCGATCG"))
+            self.assertEqual(result[1], ("seq2", "GGGTTTCCC"))
+
+        # Missing header
+        invalid_fasta = """ATCGATCG"""
+        with StringIO(invalid_fasta) as fasta_file:
+            with self.assertRaises(ValueError):
+                list(read_fasta(fasta_file))
+
+        # Header with no sequence
+        empty_seq_fasta = """>seq1
+        >seq2
+        GGGTTTCCC
+        """
+        with StringIO(empty_seq_fasta) as fasta_file:
+            with self.assertRaises(ValueError):
+                list(read_fasta(fasta_file))
+
+    def test_revcomp_read(self):
+        read = ("@SEQ_ID", "GATTACA", "!!''*(((")
+        rev_read = revcomp_read(read)
+        self.assertEqual(rev_read, ("@SEQ_ID", "TGTAATC", "(((*''!!"))
 
 if __name__ == "__main__":
     unittest.main()
