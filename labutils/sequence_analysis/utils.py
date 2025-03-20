@@ -20,7 +20,7 @@ def read_fastq(fastqfile, skip_blank=True):
         else:
             raise ValueError("Invalid header lines: %s and %s for seq %s" % (header1, header2, seq))
         
-def read_fasta(filepath):
+def read_fasta(fastafile):
     """
     Reads a FASTA file and yields (header, sequence) tuples.
 
@@ -38,26 +38,25 @@ def read_fasta(filepath):
     header = None
     sequence = []
 
-    with open(filepath, "r") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue  # Ignore empty lines
+    for line in fastafile:
+        line = line.strip()
+        if not line:
+            continue  # Ignore empty lines
 
-            if line.startswith(">"):
-                # If we already have a sequence, yield it
-                if header:
-                    if not sequence:
-                        raise ValueError(f"FASTA header '{header}' has no sequence.")
-                    yield (header, "".join(sequence))
+        if line.startswith(">"):
+            # If we already have a sequence, yield it
+            if header:
+                if not sequence:
+                    raise ValueError(f"FASTA header '{header}' has no sequence.")
+                yield (header, "".join(sequence))
 
-                # Start a new sequence
-                header = line[1:].strip()
-                sequence = []
-            else:
-                if header is None:
-                    raise ValueError("FASTA file must start with a header (line beginning with '>').")
-                sequence.append(line)
+            # Start a new sequence
+            header = line[1:].strip()
+            sequence = []
+        else:
+            if header is None:
+                raise ValueError("FASTA file must start with a header (line beginning with '>').")
+            sequence.append(line)
 
     # Yield the last sequence if present
     if header:
